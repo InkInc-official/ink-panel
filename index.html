@@ -496,8 +496,23 @@ color:#aeb8d4;
   <!-- デザイン設定 -->
   <div>
     <div class="sec-t">デザイン設定</div>
-    <div class="memo-note">色選択はプレビューモードの「プレビューのパネル色」から行います</div>
+    <div class="memo-note">パネル色は「選択中」で個別、「一括」で全パネル同時に変更できます</div>
     <div class="design-cfg">
+      <div class="cfg-row">
+        <span class="cfg-lbl">パネル色<br><span style="font-size:9px;color:#556677">選択中</span></span>
+        <input type="color" id="panelColorPicker" class="cfg-color" value="#1e1e3c"
+          oninput="W.setSelectedPanelColor(this.value)">
+        <span style="font-size:10px;color:var(--silver)">選択中パネル</span>
+      </div>
+      <div class="cp-row"><button class="cp" style="background:#1e1e3c" title="紺" onclick="document.getElementById('panelColorPicker').value='#1e1e3c';W.setSelectedPanelColor('#1e1e3c')"></button><button class="cp" style="background:#2d1b33" title="紫" onclick="document.getElementById('panelColorPicker').value='#2d1b33';W.setSelectedPanelColor('#2d1b33')"></button><button class="cp" style="background:#1a2e1a" title="深緑" onclick="document.getElementById('panelColorPicker').value='#1a2e1a';W.setSelectedPanelColor('#1a2e1a')"></button><button class="cp" style="background:#2e1a1a" title="深紅" onclick="document.getElementById('panelColorPicker').value='#2e1a1a';W.setSelectedPanelColor('#2e1a1a')"></button><button class="cp" style="background:#0d2233" title="紺青" onclick="document.getElementById('panelColorPicker').value='#0d2233';W.setSelectedPanelColor('#0d2233')"></button><button class="cp" style="background:#c9a84c" title="金" onclick="document.getElementById('panelColorPicker').value='#c9a84c';W.setSelectedPanelColor('#c9a84c')"></button><button class="cp" style="background:#ff69b4" title="ピンク" onclick="document.getElementById('panelColorPicker').value='#ff69b4';W.setSelectedPanelColor('#ff69b4')"></button><button class="cp" style="background:#00bfff" title="水色" onclick="document.getElementById('panelColorPicker').value='#00bfff';W.setSelectedPanelColor('#00bfff')"></button><button class="cp" style="background:#ff6b35" title="橙" onclick="document.getElementById('panelColorPicker').value='#ff6b35';W.setSelectedPanelColor('#ff6b35')"></button><button class="cp" style="background:#888888" title="グレー" onclick="document.getElementById('panelColorPicker').value='#888888';W.setSelectedPanelColor('#888888')"></button><button class="cp" style="background:#ffffff" title="白" onclick="document.getElementById('panelColorPicker').value='#ffffff';W.setSelectedPanelColor('#ffffff')"></button><button class="cp" style="background:#000000" title="黒" onclick="document.getElementById('panelColorPicker').value='#000000';W.setSelectedPanelColor('#000000')"></button></div>
+      <div class="cfg-row" style="margin-top:4px">
+        <span class="cfg-lbl">パネル色<br><span style="font-size:9px;color:#556677">一括</span></span>
+        <input type="color" id="panelAllColorPicker" class="cfg-color" value="#1e1e3c"
+          oninput="W.setAllPanelColor(this.value)">
+        <span style="font-size:10px;color:var(--silver)">全パネル一括</span>
+      </div>
+      <div class="cp-row"><button class="cp" style="background:#1e1e3c" title="紺" onclick="document.getElementById('panelAllColorPicker').value='#1e1e3c';W.setAllPanelColor('#1e1e3c')"></button><button class="cp" style="background:#2d1b33" title="紫" onclick="document.getElementById('panelAllColorPicker').value='#2d1b33';W.setAllPanelColor('#2d1b33')"></button><button class="cp" style="background:#1a2e1a" title="深緑" onclick="document.getElementById('panelAllColorPicker').value='#1a2e1a';W.setAllPanelColor('#1a2e1a')"></button><button class="cp" style="background:#2e1a1a" title="深紅" onclick="document.getElementById('panelAllColorPicker').value='#2e1a1a';W.setAllPanelColor('#2e1a1a')"></button><button class="cp" style="background:#0d2233" title="紺青" onclick="document.getElementById('panelAllColorPicker').value='#0d2233';W.setAllPanelColor('#0d2233')"></button><button class="cp" style="background:#c9a84c" title="金" onclick="document.getElementById('panelAllColorPicker').value='#c9a84c';W.setAllPanelColor('#c9a84c')"></button><button class="cp" style="background:#ff69b4" title="ピンク" onclick="document.getElementById('panelAllColorPicker').value='#ff69b4';W.setAllPanelColor('#ff69b4')"></button><button class="cp" style="background:#00bfff" title="水色" onclick="document.getElementById('panelAllColorPicker').value='#00bfff';W.setAllPanelColor('#00bfff')"></button><button class="cp" style="background:#ff6b35" title="橙" onclick="document.getElementById('panelAllColorPicker').value='#ff6b35';W.setAllPanelColor('#ff6b35')"></button><button class="cp" style="background:#888888" title="グレー" onclick="document.getElementById('panelAllColorPicker').value='#888888';W.setAllPanelColor('#888888')"></button><button class="cp" style="background:#ffffff" title="白" onclick="document.getElementById('panelAllColorPicker').value='#ffffff';W.setAllPanelColor('#ffffff')"></button><button class="cp" style="background:#000000" title="黒" onclick="document.getElementById('panelAllColorPicker').value='#000000';W.setAllPanelColor('#000000')"></button></div>
+      <div style="border-top:1px solid #2a2a3e;margin:6px 0 4px"></div>
       <div class="cfg-row">
         <span class="cfg-lbl">ラベル背景</span>
         <input type="color" id="lblBgPicker" class="cfg-color" value="#000000"
@@ -599,7 +614,7 @@ color:#aeb8d4;
 'use strict';
 var Z=JSON.parse(JSON.stringify(ZDATA));
 var GIFTS=GIFT_DB;
-var sel=null,mode='move',dragState=null,drawPts=[],labelDrag=null;
+var sel=null,mode='move',isPreview=false,dragState=null,drawPts=[],labelDrag=null;
 var isUpdateMode=false;
 var labelCfg={bgColor:'rgba(0,0,0,0.72)',textColor:'#ffffff',subColor:'#ffd700',fontSize:11,transparent:false,offsets:{}};
 var panelColors={},defaultPanelColor='#1e1e3c';
@@ -669,7 +684,7 @@ function loadWorkspace(){
   }catch(e){return false;}
 }
 function clearWorkspaceForNewImage(){
-  Z=[]; sel=null; previewSel=null; allClearPanelId=null; nextIdx=0; drawPts=[];
+  Z=[]; sel=null; previewSel=null; allClearPanelId=null; nextIdx=0; drawPts=[]; isPreview=false;
   panelColors={}; labelCfg.offsets={}; history=[]; historyIdx=-1;
 }
 function applyLoadedImage(src){
@@ -1039,27 +1054,28 @@ function ensureUniquePanelLabels(){
 function render(){
   ensureUniquePanelLabels();
   polyLayer.innerHTML='';labelLayer.innerHTML='';
-  var isPrev=(mode==='preview');
+  var isPrev=isPreview;
   Z.forEach(function(z){
     var opened=isOpened(z);
     var isAC=z.gift&&z.gift.allClear;
     var fill,stroke;
     var baseStroke = borderCfg.color || 'rgba(255,255,255,0.82)';
+    var isSelected = sel===z.id || previewSel===z.id;
     if(isPrev){
       fill=opened?(exportCaptureMode?'rgba(0,0,0,0)':'rgba(100,220,140,0.25)'):hexToRgba(panelColors[z.id]||defaultPanelColor,1);
-      stroke=opened?(exportCaptureMode?'rgba(0,0,0,0)':(previewSel===z.id?'rgba(255,255,255,0.95)':baseStroke)):(previewSel===z.id?'rgba(255,255,255,0.95)':baseStroke);
+      stroke=isSelected?'rgba(255,255,255,0.95)':baseStroke;
     }else{
       fill=opened?'rgba(100,220,140,0.18)':isAC?'rgba(170,170,170,0.34)':'rgba(150,160,180,0.32)';
-      stroke=((!isPrev&&sel===z.id)||previewSel===z.id)?'rgba(255,255,255,0.95)':baseStroke;
+      stroke=isSelected?'rgba(255,255,255,0.95)':baseStroke;
     }
-    var sw=((!isPrev&&sel===z.id)||previewSel===z.id)?Math.max((Number(borderCfg.width)||3.2)+1.2,3.5):(Number(borderCfg.width)||3.2);
+    var sw=isSelected?Math.max((Number(borderCfg.width)||3.2)+1.2,3.5):(Number(borderCfg.width)||3.2);
     var poly=mkEl('polygon',{points:ptsStr(z.pts),fill:fill,stroke:stroke,'stroke-width':sw,'stroke-linejoin':'round'});
-    if(!isPrev&&sel===z.id)poly.setAttribute('filter','url(#gl)');
+    if(isSelected)poly.setAttribute('filter','url(#gl)');
     if(isPrev&&opened){poly.style.pointerEvents='none';}else{poly.style.cursor='pointer';}
     if(!(isPrev&&opened)){
       (function(zid){
-        poly.addEventListener('mousedown',function(e){if(isBusy()) return; e.stopPropagation();if(isPrev)W.selPreview(zid);else if(mode!=='draw')W.selZ(zid);});
-        poly.addEventListener('touchstart',function(e){e.stopPropagation();if(isPrev)W.selPreview(zid);else if(mode!=='draw')W.selZ(zid);},{passive:false});
+        poly.addEventListener('mousedown',function(e){if(isBusy()) return; e.stopPropagation();if(mode!=='draw')W.selZ(zid);});
+        poly.addEventListener('touchstart',function(e){e.stopPropagation();if(mode!=='draw')W.selZ(zid);},{passive:false});
       })(z.id);
     }polyLayer.appendChild(poly);
   });
@@ -1067,7 +1083,7 @@ function render(){
     var cx=0,cy=0;z.pts.forEach(function(p){cx+=p[0];cy+=p[1];});
     cx=Math.round(cx/z.pts.length);cy=Math.round(cy/z.pts.length);
     var off=labelCfg.offsets[z.id]||{x:0,y:0};cx+=off.x;cy+=off.y;
-    var fs=labelCfg.fontSize,isPrev=(mode==='preview'),opened=isOpened(z);
+    var fs=labelCfg.fontSize,isPrev=isPreview,opened=isOpened(z);
     var line1=isPrev?'':z.label,line2='';
     if(opened){
       // プレビュー時は開封済みのラベル・チェックを完全非表示
@@ -1116,7 +1132,7 @@ function render(){
 
 function renderHandles(){
   handleLayer.innerHTML='';
-  if(mode==='draw'||mode==='preview'||!sel)return;
+  if(mode==='draw'||!sel)return;
   var z=gz(sel);if(!z)return;
   if(mode==='move'){
     z.pts.forEach(function(p,i){
@@ -1165,9 +1181,9 @@ function renderDraw(mx,my){
 function renderList(){
   ensureUniquePanelLabels();
   var el=document.getElementById('zList');el.innerHTML='';
-  var isPrev=mode==='preview';
+  var isPrev=isPreview;
   Z.forEach(function(z){
-    var opened=isOpened(z),isActive=isPrev?(previewSel===z.id):(sel===z.id);
+    var opened=isOpened(z),isActive=(sel===z.id||previewSel===z.id);
     var div=document.createElement('div');
     div.className='zi'+(isActive?' active':'')+(z.gift&&z.gift.allClear?' ac':'')+(opened?' opened':'');
     var dot=document.createElement('div');dot.className='zi-dot';
@@ -1177,20 +1193,22 @@ function renderList(){
     var st=document.createElement('div');st.className='zi-st';
     st.textContent=opened?'\u2713':z.gift&&z.gift.allClear?SC[z.stars].l+'\u2605':SC[z.stars].l;
     div.appendChild(dot);div.appendChild(lbl);div.appendChild(st);
-    (function(zid){div.addEventListener('click',function(){isPrev?W.selPreview(zid):W.selZ(zid);});})(z.id);
+    (function(zid){div.addEventListener('click',function(){W.selZ(zid);});})(z.id);
     el.appendChild(div);
   });
 }
 
 function updateSB(){
-  var isPrev=mode==='preview';
-  var z=isPrev?(previewSel?gz(previewSel):null):(sel?gz(sel):null);
+  var isPrev=isPreview;
+  var z=sel?gz(sel):(isPrev&&previewSel?gz(previewSel):null);
   document.getElementById('spName').textContent=z?z.label:'\u2014 \u30d1\u30cd\u30eb\u3092\u9078\u629e \u2014';
   document.getElementById('spName').style.color=z?'#eef':'var(--silver)';
-  document.getElementById('panelEditBox').style.display=isPrev?'none':'block';
+  document.getElementById('panelEditBox').style.display='block';
   var pvArea=document.getElementById('previewColorArea');
   pvArea.style.display=isPrev&&z?'block':'none';
   if(isPrev&&z)document.getElementById('previewColorPicker').value=panelColors[z.id]||defaultPanelColor;
+  var pcPicker=document.getElementById('panelColorPicker');
+  if(pcPicker && z) pcPicker.value=panelColors[z.id]||defaultPanelColor;
   if(isPrev)return;
   document.getElementById('memoInp').value=z?(z.memo||''):'';
   document.getElementById('memoInp').disabled=!z;
@@ -1492,8 +1510,8 @@ function autoAssign(){
 }
 function postToX(){
   // 投稿時：一時的にプレビュー相当のレンダリング（開封済み透明）でキャプチャ
-  var prevMode=mode,prevSel=sel,prevPreviewSel=previewSel;
-  mode='preview';sel=null;previewSel=null;exportCaptureMode=true;render();
+  var prevMode=mode,prevIsPreview=isPreview,prevSel=sel,prevPreviewSel=previewSel;
+  isPreview=true;sel=null;previewSel=null;exportCaptureMode=true;render();
   var canvas=document.createElement('canvas');canvas.width=SVG_W*2;canvas.height=SVG_H*2;
   var ctx=canvas.getContext('2d'),img=document.querySelector('.canvas-wrap img');
   ctx.drawImage(img,0,0,SVG_W*2,SVG_H*2);
@@ -1506,7 +1524,7 @@ function postToX(){
     setTimeout(function(){window.open('https://twitter.com/intent/tweet?text='+encodeURIComponent(text),'_blank');},800);
     toast('\u753b\u50cf\u4fdd\u5b58\u2192 X\u6295\u7a3f\u753b\u9762\u3067\u753b\u50cf\u3092\u6dfb\u4ed8');
     // 元のモードに戻す
-    mode=prevMode;sel=prevSel;previewSel=prevPreviewSel;exportCaptureMode=false;render();renderList();updateSB();
+    mode=prevMode;isPreview=prevIsPreview;sel=prevSel;previewSel=prevPreviewSel;exportCaptureMode=false;render();renderList();updateSB();
   };svgImg.src=url;
 }
 function buildConfirmHTML(){
@@ -1762,7 +1780,7 @@ function commitSmartAt(pt){
 
 // イベント
 svgEl.addEventListener('click',function(e){
-  if(mode==='preview')return;var pt=svgPt(e);
+  var pt=svgPt(e);
     if(mode==='draw'){
     if(drawPts.length>=3&&dist(pt[0],pt[1],drawPts[0][0],drawPts[0][1])<22){commitDraw();return;}
     drawPts.push(pt);renderDraw();
@@ -1776,8 +1794,8 @@ svgEl.addEventListener('mousemove',function(e){
 });
 svgEl.addEventListener('mouseup',function(){labelDrag=null;});
 svgEl.addEventListener('mousedown',function(e){
-  if(mode==='draw'||mode==='preview')return;
-  var pt=svgPt(e);if(!Z.some(function(z){return inPoly(pt[0],pt[1],z.pts);})){sel=null;render();renderList();updateSB();}
+  if(mode==='draw')return;
+  var pt=svgPt(e);if(!Z.some(function(z){return inPoly(pt[0],pt[1],z.pts);})){sel=null;previewSel=null;render();renderList();updateSB();}
 });
 svgEl.addEventListener('contextmenu',function(e){e.preventDefault();});
 window.addEventListener('mousemove',function(e){if(dragState&&sel){var pt=svgPt(e);gz(sel).pts[dragState.idx]=[pt[0],pt[1]];render();}});
@@ -1836,15 +1854,24 @@ var W=window.W={
   cancelGenerate:function(){ if(actionState.controller){ try{actionState.controller.abort();}catch(e){} } actionState.controller=null; setBusy(false); var ab=document.getElementById('btn-autofill'); if(ab) ab.textContent='⬚ 空白自動パネル化'; var gb=document.getElementById('btnAutoAssign'); if(gb) gb.textContent='⚡ 自動割り当て'; toast('キャンセルしました'); },
   setMode:function(m){
     if(isBusy()) return;
+    if(m==='preview'){
+      isPreview=!isPreview;
+      var b=document.getElementById('btn-preview');
+      if(b) b.className='mode-btn'+(isPreview?' on':'');
+      setTip(isPreview?'preview':mode);
+      previewSel=null;
+      render();renderList();updateSB();
+      return;
+    }
     mode=m;
-    ['move','addpt','delpt','draw','preview'].forEach(function(k){var b=document.getElementById('btn-'+k);if(b)b.className='mode-btn'+(m===k?' on':'');});
-    setTip(m);if(m!=='draw'){drawPts=[];drawLayer.innerHTML='';}
-        if(m==='preview')sel=null;else previewSel=null;
-    document.getElementById('editOnlySection').style.display=(m==='preview')?'none':'block';
+    ['move','addpt','delpt','draw'].forEach(function(k){var b=document.getElementById('btn-'+k);if(b)b.className='mode-btn'+(m===k?' on':'');});
+    setTip(isPreview?'preview':m);
+    if(m!=='draw'){drawPts=[];drawLayer.innerHTML='';}
+    previewSel=null;
     render();renderList();updateSB();
   },
-  selZ:function(id){sel=id;render();renderList();updateSB();},
-  selPreview:function(id){previewSel=id;render();renderList();updateSB();},
+  selZ:function(id){sel=id;previewSel=id;render();renderList();updateSB();},
+  selPreview:function(id){sel=id;previewSel=id;render();renderList();updateSB();},
   setPreviewColor:function(hex){if(!previewSel)return;panelColors[previewSel]=hex;render();renderList();document.getElementById('previewColorPicker').value=hex;},
   setAllPanelColor:function(hex){Z.forEach(function(z){panelColors[z.id]=hex;});defaultPanelColor=hex;render();renderList();toast('\u5168\u30d1\u30cd\u30eb\u4e00\u62ec');},
   setS:function(n){if(!sel)return;var z=gz(sel);z.stars=n;if(z.gift&&!z.gift.allClear)z.gift=null;z.opened=false;saveHistory();render();renderList();updateSB();},
@@ -1950,7 +1977,7 @@ var W=window.W={
     saveHistory();render();renderList();updateSB();toast(Z.length?'パネル削除':'すべてのパネルを削除しました');
   },
   delAllPanels:function(){
-    Z=[]; sel=null; previewSel=null; allClearPanelId=null; nextIdx=0; drawPts=[]; drawLayer.innerHTML='';
+    Z=[]; sel=null; previewSel=null; allClearPanelId=null; nextIdx=0; drawPts=[]; drawLayer.innerHTML=''; isPreview=false;
     panelColors={}; labelCfg.offsets={};
     saveHistory();render();renderList();updateSB();toast('全パネルを削除しました');
   },
@@ -2024,7 +2051,7 @@ function isBusy(){ return !!actionState.active; }
 Object.assign(W,{
   handlePromptInput:function(){persistWorkspace();},
   applyPromptColorPreset:function(){},
-  setSelectedPanelColor:function(hex){ if(!sel) return; panelColors[sel]=hex; render(); renderList(); persistWorkspace(); },
+  setSelectedPanelColor:function(hex){ var id=sel||previewSel; if(!id) return; panelColors[id]=hex; render(); renderList(); persistWorkspace(); },
   clearSelectedPanelColor:function(){ if(!sel) return; delete panelColors[sel]; render(); renderList(); persistWorkspace(); },
   setAllPanelColor:function(hex){ defaultPanelColor=hex; Z.forEach(function(z){panelColors[z.id]=hex;}); render(); renderList(); persistWorkspace(); },
   setPreviewAllColor:function(hex){ defaultPanelColor=hex; Z.forEach(function(z){panelColors[z.id]=hex;}); var ap=document.getElementById('previewAllColorPicker'); if(ap) ap.value=hex; render(); renderList(); persistWorkspace(); },
