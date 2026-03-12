@@ -1924,7 +1924,20 @@ var W=window.W={
   setAllPanelColor:function(hex){Z.forEach(function(z){panelColors[z.id]=hex;});defaultPanelColor=hex;render();renderList();toast('\u5168\u30d1\u30cd\u30eb\u4e00\u62ec');},
   setS:function(n){if(!sel)return;var z=gz(sel);z.stars=n;if(z.gift&&!z.gift.allClear)z.gift=null;z.opened=false;saveHistory();render();renderList();updateSB();},
   saveMemo:function(){if(sel)gz(sel).memo=document.getElementById('memoInp').value;persistWorkspace();},
-  saveNGCount:function(){if(!sel)return;var z=gz(sel);if(z.gift&&z.gift.nonGift){z.gift.nonGiftCount=document.getElementById('ngCountInp').value;z.gift.target=undefined;renderList();render();persistWorkspace();}},
+  saveNGCount:function(){
+    if(!sel)return;var z=gz(sel);if(!z.gift||!z.gift.nonGift)return;
+    var val=document.getElementById('ngCountInp').value.trim();
+    z.gift.nonGiftCount=val;
+    var num=parseInt(String(val).replace(/[^0-9]/g,''));
+    if(!isNaN(num)&&num>0){
+      z.gift.target=num;
+      if(z.gift.current===undefined||z.gift.current===null){z.gift.current=num;}
+    }else{
+      z.gift.target=undefined;
+      z.gift.current=undefined;
+    }
+    renderList();render();persistWorkspace();
+  },
   // ⑥ 更新モード：現在値を保存
   saveNGCurrent:function(){
     if(!sel)return;var z=gz(sel);if(!z.gift||!z.gift.nonGift)return;
