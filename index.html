@@ -1063,7 +1063,7 @@ function render(){
     var isSelected = sel===z.id || previewSel===z.id;
     if(isPrev){
       fill=opened?(exportCaptureMode?'rgba(0,0,0,0)':'rgba(100,220,140,0.25)'):hexToRgba(panelColors[z.id]||defaultPanelColor,1);
-      stroke=isSelected?'rgba(255,255,255,0.95)':baseStroke;
+      stroke=exportCaptureMode&&opened?'rgba(0,0,0,0)':(isSelected?'rgba(255,255,255,0.95)':baseStroke);
     }else{
       fill=opened?'rgba(100,220,140,0.18)':isAC?'rgba(170,170,170,0.34)':'rgba(150,160,180,0.32)';
       stroke=isSelected?'rgba(255,255,255,0.95)':baseStroke;
@@ -1200,7 +1200,8 @@ function renderList(){
 
 function updateSB(){
   var isPrev=isPreview;
-  var z=sel?gz(sel):(isPrev&&previewSel?gz(previewSel):null);
+  var activeId=sel||previewSel;
+  var z=activeId?gz(activeId):null;
   document.getElementById('spName').textContent=z?z.label:'\u2014 \u30d1\u30cd\u30eb\u3092\u9078\u629e \u2014';
   document.getElementById('spName').style.color=z?'#eef':'var(--silver)';
   document.getElementById('panelEditBox').style.display='block';
@@ -1209,7 +1210,6 @@ function updateSB(){
   if(isPrev&&z)document.getElementById('previewColorPicker').value=panelColors[z.id]||defaultPanelColor;
   var pcPicker=document.getElementById('panelColorPicker');
   if(pcPicker && z) pcPicker.value=panelColors[z.id]||defaultPanelColor;
-  if(isPrev)return;
   document.getElementById('memoInp').value=z?(z.memo||''):'';
   document.getElementById('memoInp').disabled=!z;
   document.getElementById('btnDel').style.display=z?'block':'none';
